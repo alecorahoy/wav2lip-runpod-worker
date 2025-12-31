@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y \
-    git ffmpeg python3 python3-pip python3-dev build-essential wget ca-certificates \
+    git ffmpeg python3 python3-pip python3-dev build-essential wget curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/Rudrabha/Wav2Lip.git /workspace/Wav2Lip
@@ -32,8 +32,10 @@ COPY requirements.txt /workspace/requirements.txt
 RUN pip3 install -r /workspace/requirements.txt
 
 RUN mkdir -p checkpoints && \
-    wget -O checkpoints/wav2lip_gan.pth \
-    https://github.com/Rudrabha/Wav2Lip/releases/download/v1.0/wav2lip_gan.pth
+    echo "Downloading wav2lip_gan.pth from Hugging Face..." && \
+    curl -L --retry 10 --retry-delay 5 --fail \
+    -o checkpoints/wav2lip_gan.pth \
+    https://huggingface.co/Nekochu/Wav2Lip/resolve/main/wav2lip_gan.pth
 
 COPY handler.py /workspace/Wav2Lip/handler.py
 
