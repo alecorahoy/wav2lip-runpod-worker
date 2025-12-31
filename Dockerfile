@@ -12,8 +12,10 @@ WORKDIR /workspace/Wav2Lip
 
 RUN pip3 install --upgrade pip setuptools wheel
 RUN pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
-RUN pip3 install -r requirements.txt
+# Wav2Lip sometimes lists "sklearn" which breaks pip now. Replace it with scikit-learn.
+RUN sed -i 's/^sklearn$/scikit-learn/' requirements.txt || true
 
+RUN pip3 install --no-cache-dir -r requirements.txt
 COPY requirements.txt /workspace/requirements.txt
 RUN pip3 install -r /workspace/requirements.txt
 
