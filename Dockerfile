@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y \
-    git ffmpeg python3 python3-pip python3-dev build-essential \
+    git ffmpeg python3 python3-pip python3-dev build-essential wget ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/Rudrabha/Wav2Lip.git /workspace/Wav2Lip
