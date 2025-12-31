@@ -4,7 +4,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y \
-    git ffmpeg python3 python3-pip python3-dev \
+    git ffmpeg python3 python3-pip python3-dev build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/Rudrabha/Wav2Lip.git /workspace/Wav2Lip
@@ -15,7 +15,19 @@ RUN pip3 install torch torchvision torchaudio --index-url https://download.pytor
 # Wav2Lip sometimes lists "sklearn" which breaks pip now. Replace it with scikit-learn.
 RUN sed -i 's/^sklearn$/scikit-learn/' requirements.txt || true
 
-RUN pip3 install --no-cache-dir -r requirements.txt
+# Install a modern, compatible dependency set for Wav2Lip inference (Python 3.10 friendly).
+# We avoid Wav2Lip's old requirements.txt because it often fails to build.
+RUN pip3 install --no-cache-dir \
+    "numpy<2" \
+    scipy \
+    librosa \
+    numba \
+    resampy \
+    soundfile \
+    tqdm \
+    pillow \
+    scikit-image \
+    opencv-python-headless
 COPY requirements.txt /workspace/requirements.txt
 RUN pip3 install -r /workspace/requirements.txt
 
