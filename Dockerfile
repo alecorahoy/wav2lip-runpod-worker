@@ -5,10 +5,8 @@ WORKDIR /workspace
 
 RUN apt-get update && apt-get install -y \
     git ffmpeg python3 python3-pip python3-dev build-essential wget curl ca-certificates \
+    python-is-python3 \
     && rm -rf /var/lib/apt/lists/*
-
-# 🔴 FIX: ensure `python` exists and points to python3
-RUN apt-get update && apt-get install -y python-is-python3 && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/Rudrabha/Wav2Lip.git /workspace/Wav2Lip
 WORKDIR /workspace/Wav2Lip
@@ -42,4 +40,5 @@ RUN mkdir -p checkpoints && \
     https://huggingface.co/Nekochu/Wav2Lip/resolve/main/wav2lip_gan.pth
 
 COPY handler.py /workspace/Wav2Lip/handler.py
+
 CMD ["python3", "-u", "handler.py"]
