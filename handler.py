@@ -51,7 +51,7 @@ def handler(job):
     ])
 
     subprocess.check_call([
-        "python", "inference.py",
+    "python3", "inference.py",
         "--checkpoint_path", "checkpoints/wav2lip_gan.pth",
         "--face", str(temp_face_video),
         "--audio", str(audio_path),
